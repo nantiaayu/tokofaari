@@ -1,0 +1,18 @@
+{% extends "manager/base_manager.php" %}
+
+{% block title %}Dashboard - manager Panel{% endblock %}
+
+{% block content %}
+<h1>Pilih Rentang Tanggal </h1>
+<h4>2023 des 1 - 2024 feb 29</h4>
+<form action="/analisis_forecasting" method="post">
+    <label for="start_date">Start Date:</label>
+    <input type="date" id="start_date" name="start_date">
+
+    <label for="end_date">End Date:</label>
+    <input type="date" id="end_date" name="end_date">
+
+    <button type="submit">Submit</button>
+</form>
+
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "manager/base_manager.php" %}
+{% block content %}
+    <div>
+        <h2>Update Order</h2>
+        <form method="POST" action="{{ url_for('update_order', id_orders=order[0]) }}">
+            <label for="id_product">Product:</label>
+            <select name="id_product" id="id_product">
+                {% for product in products %}
+                <option value="{{ product[0] }}" {% if product[0] == order[1] %}selected{% endif %}>{{ product[1] }}</option>
+                {% endfor %}
+            </select>
+            <br>
+            <label for="quantity">Quantity:</label>
+            <input type="number" name="quantity" id="quantity" value="{{ order[2] }}" required>
+            <br>
+            <button type="submit">Update Order</button>
+        </form>
+    </div>
+    {% endblock %}

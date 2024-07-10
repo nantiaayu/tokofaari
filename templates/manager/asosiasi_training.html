@@ -1,0 +1,68 @@
+{% extends "manager/base_manager.php" %}
+
+{% block title %}Dashboard - Manager Panel{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Training Model Asosiasi</h1>
+    <form action="{{ url_for('asosiasi_training') }}" method="post" enctype="multipart/form-data" class="mb-4">
+        <div class="form-group">
+            <label for="file">Pilih File Excel:</label>
+            <input type="file" name="file" id="file" class="form-control-file" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Upload</button>
+    </form>
+
+    {% if nama_barang_list %}
+    <h2>Pengaturan Model</h2>
+    <form action="{{ url_for('asosiasi_training') }}" method="post">
+        <div class="form-group">
+            <label for="nilai_support">Nilai Support:</label>
+            <input type="text" name="nilai_support" id="nilai_support" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="nama_barang">Pilih Barang:</label>
+            <select name="nama_barang" id="nama_barang" class="form-control" multiple>
+                {% for barang in nama_barang_list %}
+                    <option value="{{ barang }}">{{ barang }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Train Model</button>
+    </form>
+    {% endif %}
+
+    <h2>Riwayat Model</h2>
+    {% if model_history %}
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nama Barang</th>
+                    <th>Nilai Support</th>
+                    <th>Waktu Pembuatan</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for model in model_history %}
+                <tr>
+                    <td>{{ model['id'] }}</td>
+                    <td>{{ model['nama_barang'] }}</td>
+                    <td>{{ model['nilai_support'] }}</td>
+                    <td>{{ model['created_at'] }}</td>
+                    <td>
+                        <form action="{{ url_for('delete_model', model_id=model['id']) }}" method="post" onsubmit="return confirm('Apakah Anda yakin ingin menghapus model ini?');">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

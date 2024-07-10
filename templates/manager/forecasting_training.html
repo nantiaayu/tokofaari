@@ -1,0 +1,56 @@
+{% extends "manager/base_manager.php" %}
+
+{% block title %}Dashboard - Manager Panel{% endblock %}
+
+{% block content %}
+<form action="{{ url_for('forecasting_training') }}" method="post" enctype="multipart/form-data">
+    <label for="file">Pilih File:</label>
+    <input type="file" name="file" id="file">
+    <input type="submit" value="Upload">
+</form>
+
+{% if nama_barang_list %}
+<form action="{{ url_for('forecasting_training') }}" method="post">
+    <input type="hidden" name="file" value="{{ file }}">
+    <label for="nama_barang">Pilih Barang:</label>
+    <select name="nama_barang" id="nama_barang" required>
+        {% for barang in nama_barang_list %}
+            <option value="{{ barang }}">{{ barang }}</option>
+        {% endfor %}
+    </select>
+
+    <input type="hidden" name="action" value="train_model">
+    <input type="submit" value="Train Model">
+</form>
+{% endif %}
+
+{% if model_history %}
+<h2>Riwayat Model</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nama Barang</th>
+            <th>Waktu Pembuatan</th>
+            <th>Aksi</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for model in model_history %}
+            <tr>
+                <td>{{ model[0] }}</td>  {# Accessing id from tuple #}
+                <td>{{ model[1] }}</td>  {# Accessing nama_barang from tuple #}
+                <td>{{ model[3] }}</td>  {# Accessing created_at from tuple #}
+                <td>
+                    <a href="{{ url_for('forecasting_results', model_id=model[0]) }}" class="btn btn-info">Lihat Hasil</a>
+                    <form action="{{ url_for('delete_model_forecasting', model_id=model[0]) }}" method="post" onsubmit="return confirm('Apakah Anda yakin ingin menghapus model ini?');">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button type="submit" class="btn btn-danger">Hapus</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+{% endblock %}

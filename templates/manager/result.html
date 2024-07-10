@@ -1,0 +1,28 @@
+{% extends "manager/base_manager.php" %}
+
+{% block title %}Dashboard - manager Panel{% endblock %}
+
+{% block content %}
+<h1>Association Rules Result</h1>
+    <p>Selected Items: {{ selected_items }}</p>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Item Set</th>
+                <th>Support Count</th>
+                <th>Support</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in result %}
+            <tr>
+                <td>{{ row['Item Set'] }}</td>
+                <td>{{ row['Support Count'] }}</td>
+                <td>{{ row['Support'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="/download_excel?selected_items={{ selected_items }}">Download Excel</a>
+
+{% endblock %}

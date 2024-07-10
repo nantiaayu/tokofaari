@@ -1,0 +1,53 @@
+{% extends "manager/base_manager.php" %}
+
+{% block title %}Dashboard - manager Panel{% endblock %}
+
+{% block content %}
+<h1>Hasil Analisis Forecasting </h1>
+<h4>Data Yang di Training </h4>
+    
+    <!-- Tampilkan tabel data -->
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Tanggal</th>
+                <th>Jumlah</th>
+                <th>Moving Average (3 days)</th>
+                <!-- Tambahkan kolom lain jika perlu -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for index, row in df.iterrows() %}
+                <tr>
+                    <td>{{ index }}</td>
+                    <td>{{ row['Jumlah'] }}</td>
+                    <td>{{ row['Moving Average'] }}</td>
+                    <!-- Tampilkan kolom lain jika perlu -->
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <!-- Tampilkan metrik evaluasi jika sudah dihitung -->
+    <h2>Metrik Evaluasi</h2>
+    <ul>
+        <li>Mean Absolute Error (MAE): {{ mae }}</li>
+        <p>MAE mengukur rata-rata dari selisih absolut antara prediksi (moving average) dengan nilai sebenarnya (Jumlah).</p>
+        <li>Mean Squared Error (MSE): {{ mse }}</li>
+        <p>MSE mengukur rata-rata dari kuadrat kesalahan antara prediksi dan nilai sebenarnya.</p>
+        <p>Nilai MSE yang lebih tinggi dibandingkan dengan MAE menunjukkan bahwa terdapat variasi 
+            atau penyebaran yang lebih besar dari kesalahan prediksi, dengan lebih banyak penekanan
+             pada kesalahan yang lebih besar.</p>
+        
+        <li>Root Mean Squared Error (RMSE): {{ rmse }}</li>
+        <p>RMSE adalah akar kuadrat dari MSE, yang memberikan gambaran tentang seberapa besar kesalahan 
+            rata-rata dari prediksi (moving average) dalam satuan yang sama dengan variabel yang diprediksi
+             (dalam hal ini, Jumlah).</p>
+        <li>Mean Absolute Percentage Error (MAPE): {{ mape }}%</li>
+        <p>MAPE mengukur rata-rata dari persentase kesalahan absolut relatif terhadap nilai sebenarnya.</p>
+        <p>Nilai MAPE yang tinggi seperti ini menunjukkan bahwa prediksi dari model dapat memiliki variabilitas
+             yang signifikan dalam mengestimasi nilai Jumlah.</p>
+    </ul>
+    
+{% endblock %}
+<!--<a href="{{ url_for('download_excel1', start_date=start_date, end_date=end_date) }}" class="btn btn-primary">Download Hasil Analisis ke Excel</a>-->

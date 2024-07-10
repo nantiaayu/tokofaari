@@ -1,0 +1,48 @@
+{% extends "manager/base_manager.php" %}
+
+{% block title %}Hasil Model Forecasting{% endblock %}
+
+{% block content %}
+<h1>Hasil Model Forecasting</h1>
+
+{% if model_data is not none and not model_data.empty %}
+<h3>Data Model</h3>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Tanggal</th>
+            <th>Nama Barang</th>
+            <th>Jumlah Barang</th>
+            <th>Satuan</th>
+            <th>Moving Average</th>
+            <th>MAE</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for index, row in model_data.iterrows() %}
+            <tr>
+                <td>{{ row['Tanggal'] }}</td>
+                <td>{{ row['Nama_Barang'] }}</td>
+                <td>{{ row['Jumlah_Barang'] }}</td>
+                <td>{{ row['Satuan'] }}</td>
+                <td>{{ row['Moving_Average'] }}</td>
+                <td>{{ row['MAE'] }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>Grafik Model</h3>
+{% if plot_filepath %}
+<img src="{{ url_for('static', filename='admin/gambar_product/' + plot_filepath) }}" alt="Grafik Model Terbaru" class="img-fluid">
+<p class="mt-2">Grafik di atas menampilkan perubahan jumlah barang dari waktu ke waktu. Garis biru menunjukkan data aktual, sementara garis merah adalah rata-rata bergerak yang membantu dalam melihat tren jangka panjang. Grafik ini membantu dalam memprediksi permintaan masa depan berdasarkan tren historis.</p>
+
+
+{% endif %}
+
+<h3>Evaluasi Model</h3>
+<p>Mean Absolute Error (MAE): {{ mae }}</p>
+
+{% endif %}
+
+{% endblock %}

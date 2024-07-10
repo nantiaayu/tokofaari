@@ -1,0 +1,70 @@
+{% extends "manager/base_manager.php" %}
+
+{% block title %}Dashboard - Panel Manager{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Hasil Model Asosiasi</h1>
+    <form action="{{ url_for('asosiasi') }}" method="post">
+        <div class="form-group">
+            <label for="model_id">Pilih Model:</label>
+            <select name="model_id" id="model_id" class="form-control" multiple>
+                {% for model in model_history %}
+                    <option value="{{ model['id'] }}">{{ model['waktu_pembuatan'] }} - {{ model['nama_barang'] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Load Model</button>
+    </form>
+
+    {% if model_data %}
+        <h2 class="mt-4">Frequent Itemsets</h2>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Itemsets</th>
+                        <th>Support</th>
+                        <th>Support Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for index, row in model_data['frequent_itemsets'].iterrows() %}
+                        <tr>
+                            <td>{{ row['itemsets'] | join(', ') }}</td>
+                            <td>{{ "%.2f" % (row['support'] * 100) }}%</td>
+                            <td>{{ "%.0f" % row['support_count'] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <h2 class="mt-4">Aturan Asosiasi</h2>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Antecedents</th>
+                        <th>Consequents</th>
+                        <th>Support</th>
+                        <th>Confidence</th>
+                        <th>Lift</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for index, row in model_data['rules'].iterrows() %}
+                        <tr>
+                            <td>{{ row['antecedents'] | join(', ') }}</td>
+                            <td>{{ row['consequents'] | join(', ') }}</td>
+                            <td>{{ "%.2f" % (row['support'] * 100) }}%</td>
+                            <td>{{ "%.2f" % (row['confidence'] * 100) }}%</td>
+                            <td>{{ "%.2f" % row['lift'] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
